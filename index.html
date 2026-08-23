@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Recommendation</title>
 
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        nav {
+            background: #222;
+            color: white;
+            padding: 18px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav h2 {
+            font-size: 24px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 20px 30px;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .search-box {
+            text-align: center;
+            margin: 20px auto 40px;
+        }
+
+        .search-box input {
+            width: 350px;
+            max-width: 80%;
+            padding: 14px;
+            border: 1px solid #aaa;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .search-box button {
+            padding: 14px 22px;
+            margin-left: 8px;
+            border: none;
+            border-radius: 6px;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .search-box button:hover {
+            background: #0056b3;
+        }
+
+        #results {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding: 20px 40px 60px;
+        }
+
+        .card {
+            background: white;
+            width: 320px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+            color: #222;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.5;
+        }
+
+        #message {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>Travel Recommendation</h2>
+
+        <div>
+            <a href="#">Home</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Explore Beautiful Places</h1>
+        <p>Search for temples, beaches and other amazing destinations.</p>
+    </section>
+
+    <div class="search-box">
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for a place..."
+        >
+
+        <button onclick="searchPlaces()">Search</button>
+    </div>
+
+    <div id="message">
+        Type <strong>temple</strong> and click Search to see temple recommendations.
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const places = [
+            {
+                name: "Golden Temple",
+                category: "temple",
+                description: "The Golden Temple is a beautiful and famous temple located in Amritsar, India.",
+                image: "https://images.unsplash.com/photo-1609947017136-9daf32a5eb16?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                name: "Meenakshi Amman Temple",
+                category: "temple",
+                description: "Meenakshi Amman Temple is a historic temple famous for its magnificent architecture in Madurai, India.",
+                image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                name: "Virupaksha Temple",
+                category: "temple",
+                description: "Virupaksha Temple is an ancient temple and an important landmark of Hampi, India.",
+                image: "https://images.unsplash.com/photo-1600100397608-f010e1c7f8c5?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                name: "Baga Beach",
+                category: "beach",
+                description: "Baga Beach is a popular beach destination in Goa.",
+                image: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+                name: "Marina Beach",
+                category: "beach",
+                description: "Marina Beach is one of the most famous beaches in Chennai.",
+                image: "https://images.unsplash.com/photo-1473116763249-2faaef81ccda?auto=format&fit=crop&w=800&q=80"
+            }
+        ];
+
+        function searchPlaces() {
+            const searchTerm = document
+                .getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+            const results = document.getElementById("results");
+            const message = document.getElementById("message");
+
+            results.innerHTML = "";
+
+            if (searchTerm === "") {
+                message.innerHTML = "Please enter a search term.";
+                return;
+            }
+
+            const matchingPlaces = places.filter(place =>
+                place.category.includes(searchTerm) ||
+                place.name.toLowerCase().includes(searchTerm) ||
+                place.description.toLowerCase().includes(searchTerm)
+            );
+
+            if (matchingPlaces.length === 0) {
+                message.innerHTML = "No recommendations found.";
+                return;
+            }
+
+            message.innerHTML =
+                "Recommended places for: <strong>" +
+                searchTerm +
+                "</strong>";
+
+            matchingPlaces.forEach(place => {
+                const card = document.createElement("div");
+                card.className = "card";
+
+                card.innerHTML = `
+                    <img src="${place.image}" alt="${place.name}">
+                    <div class="card-content">
+                        <h2>${place.name}</h2>
+                        <p>${place.description}</p>
+                    </div>
+                `;
+
+                results.appendChild(card);
+            });
+        }
+
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                searchPlaces();
+            }
+        });
+    </script>
+
+</body>
+</html>
